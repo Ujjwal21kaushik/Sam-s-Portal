@@ -1,0 +1,3 @@
+Alembic is configured for schema migration. Generate the initial revision with:
+alembic revision --autogenerate -m "initial schema"
+Then apply it with: alembic upgrade head
