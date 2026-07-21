@@ -4,7 +4,7 @@ from typing import Optional
 from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
-from jose import jwt, JWTError
+from jose import jwt, JWTError 
 from passlib.context import CryptContext
 from pydantic import BaseModel, EmailStr, ConfigDict
 from pydantic_settings import BaseSettings, SettingsConfigDict
