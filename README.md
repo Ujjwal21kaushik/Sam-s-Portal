@@ -35,3 +35,19 @@ Open `http://localhost:5173`.
 Only the Admin account can add, edit or delete students, faculty, departments, courses, subjects, companies and other core records. Students can submit leave; only Admin can approve it. Faculty can mark attendance for their assigned students.
 
 By default the project uses SQLite for no-friction local setup. Set `DATABASE_URL` to a PostgreSQL connection string before startup to use PostgreSQL.
+
+## Deploy with SQLite
+
+SQLite works if your host gives you persistent storage.
+
+Backend environment variables:
+
+- `DATABASE_URL=sqlite:////var/data/college.db` or the equivalent persistent file path on your host
+- `SECRET_KEY=change-this-to-a-long-random-secret`
+- `ALLOWED_ORIGINS=https://your-frontend-domain`
+
+Frontend environment variables:
+
+- `VITE_API_URL=https://your-backend-domain/api`
+
+Deploy the backend first, then build and deploy the frontend from the `frontend` folder with `npm run build`.

@@ -9,7 +9,7 @@ import heroImage from './assets/images/gla_university_campus_hero_1784644580488.
 type User = { name: string; email: string; role: string };
 type Item = Record<string, any> & { id: number };
 
-const api = axios.create({ baseURL: 'http://localhost:8000/api' });
+const api = axios.create({ baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:8000/api' });
 api.interceptors.request.use(config => {
   const token = localStorage.token;
   if (token) config.headers.Authorization = `Bearer ${token}`;

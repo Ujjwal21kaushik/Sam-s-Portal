@@ -1,4 +1,5 @@
 from datetime import datetime, date, timedelta, timezone
+import os
 from typing import Optional
 from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -19,6 +20,9 @@ if settings.database_url.startswith('postgresql://'):
     settings.database_url=settings.database_url.replace('postgresql://','postgresql+psycopg://',1)
 engine=create_engine(settings.database_url,connect_args={'check_same_thread':False} if settings.database_url.startswith('sqlite') else {})
 SessionLocal=sessionmaker(bind=engine,autoflush=False)
+
+allowed_origins=[origin.strip() for origin in os.getenv('ALLOWED_ORIGINS','http://localhost:5173').split(',') if origin.strip()]
+
 class Base(DeclarativeBase): pass
 class User(Base):
     __tablename__='users'; id:Mapped[int]=mapped_column(primary_key=True); name:Mapped[str]=mapped_column(String(120)); email:Mapped[str]=mapped_column(String(150),unique=True); password_hash:Mapped[str]=mapped_column(String(255)); role:Mapped[str]=mapped_column(String(20)); is_active:Mapped[bool]=mapped_column(Boolean,default=True)
@@ -77,7 +81,7 @@ def admin(user:User=Depends(current)):
     if user.role!='admin': raise HTTPException(403,'Administrator access required')
     return user
 app=FastAPI(title='College Management Portal API')
-app.add_middleware(CORSMiddleware,allow_origins=['http://localhost:5173'],allow_methods=['*'],allow_headers=['*'],allow_credentials=True)
+app.add_middleware(CORSMiddleware,allow_origins=allowed_origins,allow_methods=['*'],allow_headers=['*'],allow_credentials=True)
 @app.on_event('startup')
 def startup():
     Base.metadata.create_all(engine)
